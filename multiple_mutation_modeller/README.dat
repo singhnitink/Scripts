@@ -1,0 +1,18 @@
+#Mutate residues using Modeller
+Step1: Register for Modeller license key
+
+Step2: conda config --add channels salilab
+	conda install modeller
+
+Step3: Goto and update key: /home/singh_nitin/anaconda3/lib/modeller-10.2/modlib/modeller/config.py
+
+
+Step4: conda activate
+
+Step5: python modeller_mutate.py AF-P42212-F1-model_v2.pdb 1 LEU A > mutate.log
+
+pdbfile: AF-P42212-F1-model_v2.pdb
+position of mutation (residue number): 1
+residue to mutate with: LEU
+chain: A
+####:::: Here MET at position 1 is mutated to LEU
