@@ -1,0 +1,29 @@
+read
+  mol pqr /home/singh_nitin/Desktop/singh_nitin/new_charmm36/mutations/silica_surface/GFP/gfp_proteins/wild/apbs/protein.pqr
+end
+elec
+  mg-auto
+  dime 129 129 129
+  cglen 72.23550224304199 57.394500732421875 88.98449993133545
+  cgcent mol 1
+  fglen 72.23550224304199 57.394500732421875 88.98449993133545
+  fgcent mol 1
+  mol 1
+  lpbe
+  bcfl sdh
+  srfm smol
+  chgm spl2
+  ion 1 0.150 2.0
+  ion -1 0.150 2.0
+  pdie  1.0
+  sdie  78.54
+  sdens  10.0
+  srad  1.4
+  swin  0.3
+  temp  298.15
+  gamma  0.105
+  calcenergy no
+  calcforce no
+  write pot dx pot
+end
+quit
