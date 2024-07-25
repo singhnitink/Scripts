@@ -1,0 +1,7 @@
+cellBasisVector1 94.54 0 0 
+cellBasisVector2 0 89.59 0 
+cellBasisVector3 0 0 105.09 
+cellorigin 46.94 44.80 54.76
+
+ ######compiled by Nitin Kumar Singh ###### 
+ ######report bugs at singh_nitin@iitgn.ac.in######
