@@ -1,0 +1,140 @@
+
+structure          protein_silica_solvated_0M.psf
+coordinates        protein_silica_solvated_0M.pdb
+
+set temperature    300 ;# target temperature used several times below
+
+temperature         $temperature    ;# initialize velocities randomly
+set outputname     nvt1
+
+
+firsttimestep      0
+
+# continuing a run
+#set inputname      equi        ;# only need to edit this in one place!
+#binCoordinates     $inputname.restart.coor  ;# coordinates from last run (binary)
+#binVelocities      $inputname.restart.vel   ;# velocities from last run (binary)
+#extendedSystem	   $inputname.restart.xsc   ;# cell dimensions from last run
+
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Output
+outputName          $outputname
+
+restartfreq         5000    ;# 500steps = every 1ps
+dcdfreq             50000
+xstFreq             50000
+outputEnergies      50000
+outputPressure      50000
+outputTiming        10000    ;# shows time per step and time to completion
+
+# Force-Field Parameters
+paraTypeCharmm          on;                 # We're using charmm type parameter file(s)
+                                            # multiple definitions may be used but only one file per definition
+parameters              ../toppar/par_all36_prot.prm
+parameters              ../toppar/par_all36_na.prm
+parameters              ../toppar/par_all36_carb.prm
+parameters              ../toppar/par_all36_lipid.prm
+parameters              ../toppar/par_all36_cgenff.prm
+parameters              ../toppar/par_interface.prm
+parameters              ../toppar/toppar_all36_moreions.str
+parameters              ../toppar/toppar_all36_nano_lig.str
+parameters              ../toppar/toppar_all36_nano_lig_patch.str
+parameters              ../toppar/toppar_all36_synthetic_polymer.str
+parameters              ../toppar/toppar_all36_synthetic_polymer_patch.str
+parameters              ../toppar/toppar_all36_polymer_solvent.str
+parameters              ../toppar/toppar_water_ions.str
+parameters              ../toppar/toppar_dum_noble_gases.str
+parameters              ../toppar/toppar_ions_won.str
+parameters              ../toppar/toppar_all36_prot_arg0.str
+parameters              ../toppar/toppar_all36_prot_c36m_d_aminoacids.str
+parameters              ../toppar/toppar_all36_prot_fluoro_alkanes.str
+parameters              ../toppar/toppar_all36_prot_heme.str
+parameters              ../toppar/toppar_all36_prot_na_combined.str
+parameters              ../toppar/toppar_all36_prot_retinol.str
+parameters              ../toppar/toppar_all36_prot_model.str
+parameters              ../toppar/toppar_all36_prot_modify_res.str
+parameters              ../toppar/toppar_all36_na_nad_ppi.str
+parameters              ../toppar/toppar_all36_na_rna_modified.str
+parameters              ../toppar/toppar_all36_lipid_sphingo.str
+parameters              ../toppar/toppar_all36_lipid_archaeal.str
+parameters              ../toppar/toppar_all36_lipid_bacterial.str
+parameters              ../toppar/toppar_all36_lipid_cardiolipin.str
+parameters              ../toppar/toppar_all36_lipid_cholesterol.str
+parameters              ../toppar/toppar_all36_lipid_dag.str
+parameters              ../toppar/toppar_all36_lipid_inositol.str
+parameters              ../toppar/toppar_all36_lipid_lnp.str
+parameters              ../toppar/toppar_all36_lipid_lps.str
+parameters              ../toppar/toppar_all36_lipid_mycobacterial.str
+parameters              ../toppar/toppar_all36_lipid_miscellaneous.str
+parameters              ../toppar/toppar_all36_lipid_model.str
+parameters              ../toppar/toppar_all36_lipid_prot.str
+parameters              ../toppar/toppar_all36_lipid_tag.str
+parameters              ../toppar/toppar_all36_lipid_yeast.str
+parameters              ../toppar/toppar_all36_lipid_hmmm.str
+parameters              ../toppar/toppar_all36_lipid_detergent.str
+parameters              ../toppar/toppar_all36_lipid_ether.str
+parameters              ../toppar/toppar_all36_carb_glycolipid.str
+parameters              ../toppar/toppar_all36_carb_glycopeptide.str
+parameters              ../toppar/toppar_all36_carb_imlab.str
+parameters              ../toppar/toppar_all36_label_spin.str
+parameters              ../toppar/toppar_all36_label_fluorophore.str
+
+# These are specified by CHARMM
+exclude             scaled1-4
+1-4scaling          1.0
+switching           on
+
+# You have some freedom to choose cutoff
+cutoff              12.0 ;# may use smaller, maybe 10, with PME
+switchdist          10.0 ;# cutoff - 2
+
+# Promise that atom won't move more than 2A in a cycle
+pairlistdist        14.0 ;# cutoff + 2
+
+
+# Integrator Parameters
+timestep            2.0  ;# 2fs/step
+rigidBonds          all  ;# needed for 2fs steps
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+
+# Constant Temperature Control
+langevin            on    ;# do langevin dynamics
+langevinDamping     1     ;# damping coefficient (gamma) of 1/ps
+langevinTemp        $temperature
+langevinHydrogen    off    ;# don't couple langevin bath to hydrogens
+
+wrapAll             on
+
+# PME (for full-system periodic electrostatics)
+PME                 yes
+PMEGridSpacing      1.0
+
+
+
+# Periodic Boundary conditions
+cellBasisVector1 94.54 0 0 
+cellBasisVector2 0 89.59 0 
+cellBasisVector3 0 0 155.08 
+cellorigin 46.95 44.78 79.94
+
+fixedAtoms         on
+fixedAtomsForces   off
+fixedAtomsFile     constraint.pdb
+fixedAtomsCol      B
+
+
+colvars                 on
+colvarsConfig           colvar.in 
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+minimize            5000          ;# lower potential energy for 1000 steps
+reinitvels          $temperature  ;# since minimization zeros velocities
+run 50000000 ;#100ns
